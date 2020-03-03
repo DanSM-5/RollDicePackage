@@ -47,7 +47,6 @@ public class RollingProcess {
 
             await (rollingTaskAsync(counter, i, report, whenDone, cancelProcess));
         }
-        report.accept(progress, getPercentage());
     }
 
     public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
@@ -62,11 +61,7 @@ public class RollingProcess {
             tasks.add(rollingTaskAsync(counter, i, report, whenDone, cancelProcess));
         }
 
-        List<Integer> results = await(CompletableFuture.supplyAsync(() -> tasks.stream()
-                                    .map(cf -> cf.join())
-                                    .collect(Collectors.toList())));
-
-        report.accept(progress, getPercentage());
+        List<Integer> results = await(CompletableFutureAsync.whenAll(tasks));
     }
 
     private CompletableFuture<Integer> rollingTaskAsync(Counter counter, int diceNumber, BiConsumer<Integer, Integer> report, BiConsumer<Integer, Integer> whenDone, CancelationProcess cancelProcess) {
@@ -95,8 +90,8 @@ public class RollingProcess {
             }
 
             setProgress(counterList.stream().map(c -> c.value).collect(Collectors.summingInt(Integer::intValue)));
-            whenDone.accept(diceNumber, counter.getResult());
             report.accept(progress, getPercentage());
+            whenDone.accept(diceNumber, counter.getResult());
 
             return counter.getResult();
         }));
@@ -177,12 +172,8 @@ public class RollingProcess {
     }
 
     public int getPercentage() {
-        return (int) Math.ceil(((double) progress / getTotal()) * 100);
+        return (int) Math.floor(((double) progress / getTotal()) * 100);
     }
-
-//    public void setPercentage(int percentage) {
-//        this.percentage = percentage;
-//    }
 
     public int getTotal() {
         return sequence * numberOfDices;
@@ -191,8 +182,4 @@ public class RollingProcess {
     public int getStep() {
         return getTotal() / 100;
     }
-
-//    public void setStep(int step) {
-//        this.step = step;
-//    }
 }
