@@ -50,7 +50,7 @@ public class RollingProcess {
         report.accept(progress, getPercentage());
     }
 
-    public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) throws ExecutionException, InterruptedException {
+    public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
         List<CompletableFuture<Integer>> tasks = new ArrayList<>();
         counterList = new ArrayList<>();
         Counter counter;
@@ -62,36 +62,11 @@ public class RollingProcess {
             tasks.add(rollingTaskAsync(counter, i, report, whenDone, cancelProcess));
         }
 
-        // Third iteration awaiting all the process
         List<Integer> results = await(CompletableFuture.supplyAsync(() -> tasks.stream()
                                     .map(cf -> cf.join())
                                     .collect(Collectors.toList())));
 
         report.accept(progress, getPercentage());
-
-//        Second iteration. Using await to return the List<Integer> from CompletableFuture
-//        CompletableFuture<List<Integer>> awaitableTasks =
-//                CompletableFuture.allOf(tasks.toArray(new CompletableFuture[tasks.size()]))
-//                .thenApply(t -> tasks.stream()
-//                        .map(cf -> cf.join())
-//                        .collect(Collectors.toList()));
-//        List<Integer> results = await(awaitableTasks);
-
-//        First iteration. Using CompletableFuture library
-//        CompletableFuture<Void> doneTasks = CompletableFuture.allOf(tasks.toArray(new CompletableFuture[tasks.size()]));
-//
-//        CompletableFuture<List<Integer>> futures = doneTasks.thenApply(future ->
-//            tasks.stream()
-//                    .map(completableFuture -> completableFuture.join())
-//                    .collect(Collectors.toList())
-//        );
-//
-//        CompletableFuture cf = futures.thenApply(integers -> integers
-//                .stream()
-//                .map(Integer::intValue)
-//                .collect(Collectors.toList()));
-//
-//        List<Integer> results = (List<Integer>) cf.get();
     }
 
     private CompletableFuture<Integer> rollingTaskAsync(Counter counter, int diceNumber, BiConsumer<Integer, Integer> report, BiConsumer<Integer, Integer> whenDone, CancelationProcess cancelProcess) {

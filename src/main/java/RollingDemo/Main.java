@@ -3,10 +3,8 @@ package RollingDemo;
 import RollingDiceLib.CancelationProcess;
 import RollingDiceLib.RollingProcess;
 
-import java.util.concurrent.ExecutionException;
-
 public class Main {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
+    public static void main(String[] args) {
         System.out.println("starting...");
         RollingProcess process = new RollingProcess(6,8000000);
 
