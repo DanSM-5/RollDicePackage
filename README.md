@@ -125,7 +125,7 @@ public class CompletableFutureAsync {
 
 ```
 
-In this class I declared only one generic method that accepts a List<CompletableFuture<T>> and returns a CompletableFuture<List<T>> so the return can be used directly in the async() method.
+In this class I declared only one generic method that accepts a List<CompletableFuture<T>> and returns a CompletableFuture<List<T>> so the return can be used directly in the await() method.
         
  ### Final Method
  
