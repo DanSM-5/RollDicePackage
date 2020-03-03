@@ -79,6 +79,11 @@ Here is were the ea-async library comes into play. Using the await() method I wa
 
 ### Same method using await() from ea-async library 
 ```
+// Required call to enable async() method
+static {
+    Async.init();
+}
+
 public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
         // Same list to store the CompletableFuture objects
         List<CompletableFuture<Integer>> tasks = new ArrayList<>();
