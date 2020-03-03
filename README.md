@@ -1,7 +1,7 @@
 # RollDicePackage
 It is a package with a ported version of the RollingDiceLib for Java using the library ea-async.
 
-## Awaiting multiple CompletableFuture tasks
+## Awaiting multiple CompletableFuture objects
 
 The class CompletableFuture allow us to write asynchronous code more easily. However, it is still not as simple as using async/await like in other lenguages.
 
