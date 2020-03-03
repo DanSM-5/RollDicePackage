@@ -92,7 +92,8 @@ public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer
         // With the help of await() I can return the result of a CompletableFuture object
         // In this case, I use join() to create a CompletableFuture<List<Integer>> that 
         // will return the final List<Integer> with the results of the CompletableFuture objects
-        List<Integer> results = await(CompletableFuture.supplyAsync(() -> tasks.stream()
+        List<Integer> results = await(CompletableFuture.supplyAsync(() -> tasks
+                                    .stream()
                                     .map(cf -> cf.join())
                                     .collect(Collectors.toList())));
 }
