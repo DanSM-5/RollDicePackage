@@ -11,6 +11,7 @@ This is great because it helps to reduce the complexity of asynchronous tasks, a
 I starting using this approach with ea-async and it works very well until I got stuck in part, "How to await multiple CompletableFuture objects until all of them are done?"
 To explain this let me made an anolog with C# where I originally wrote this function.
 
+### Original method created in C#
 ```
 public async Task RollDiceAsyncParallel(Action<int, int> report, Action<int,int> done, CancellationToken ct)
         {
@@ -35,6 +36,7 @@ After I call RollingTaskAync() I get a reference to a Task<int>, I group them in
 
 After numerous attempts, I finally was able to compute the same process in Java using only CompletableFuture objects with the help of this article https://medium.com/@kalpads/fantastic-completablefuture-allof-and-how-to-handle-errors-27e8a97144a0.
 
+### First attempt of writting the method in Java
 ```
 public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) throws ExecutionException, InterruptedException {
         // List to store a reference of each CompletableFuture object
@@ -75,6 +77,7 @@ public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer
 Now both methods do exactly the same thing but the solution in Java is more complex and require more knowledge to understand what's happening.
 Here is were the ea-async library comes into play. Using the await() method I was able to rewrite the same method in a simple way that resembles the C# version.
 
+### Same method using await() from ea-async library 
 ```
 public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) throws ExecutionException, InterruptedException {
         // Same list to store the CompletableFuture objects
