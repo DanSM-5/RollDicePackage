@@ -110,3 +110,43 @@ public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer
 The method await() only accepts a Future or CompletableFuture object to return, so the way to await multiple CompletableFuture tasks is to map them into
 a List<T>. However, List<T> is not an instance of CompletableFuture, so it can't be used with await directly. That's why I use supplyAsync() method
 to process the maping to a List<T> asynchronously or in other words, to return a CompletableFuture\<List\<Integer\>\> that can be used with await().
+        
+### Static Class to get a similar functionality of the Task.WhenAll()
+
+```
+public class CompletableFutureAsync {
+    public static <T> CompletableFuture<List<T>> whenAll(List<CompletableFuture<T>> collection){
+        return CompletableFuture.supplyAsync(() -> collection.stream()
+                .map(cf -> cf.join())
+                .collect(Collectors.toList()));
+    }
+}
+
+```
+
+In this class I declared only one generic method that accepts a List<CompletableFuture<T>> and returns a CompletableFuture<List<T>> so the return can be used directly in the async() method.
+        
+ ### Final Method
+ 
+ ```
+ 
+     public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
+        List<CompletableFuture<Integer>> tasks = new ArrayList<>();
+        counterList = new ArrayList<>();
+        Counter counter;
+        for(int i = 0; i < numberOfDices; i++){
+
+            counter = new Counter();
+            counterList.add(counter);
+
+            tasks.add(rollingTaskAsync(counter, i, report, whenDone, cancelProcess));
+        }
+
+        // Now it looks very similar to the original method in C# 
+        List<Integer> results = await(CompletableFutureAsync.whenAll(tasks));
+    }
+ 
+ ```
+
+Finally we have this refactored method that is easier to understand. 
+The adventage of this approach is the readability. It is more comprehensive and intuitive than the original method, which is key to write clean code.
