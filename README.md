@@ -173,4 +173,4 @@ There is also a possibility to rewrite the method to execute the same result in 
     }
 ```
 
-The output of this method is identicall to the previous version and both execute the rollingTaskAsync methods in parallel. The main difference between both is the way they are written. Depending of the situation one can be more explicit with our intentions, so it is up to you to decide which version fits your requirements.
+The output of this method is identical to the previous version and both execute the rollingTaskAsync methods in parallel. The main difference between both is the way they are written. Depending of the situation one can be more explicit with our intentions, so it is up to you to decide which version fits your requirements.
