@@ -15,6 +15,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.ea.async.Async.await;
 
@@ -50,18 +51,15 @@ public class RollingProcess {
     }
 
     public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
-        List<CompletableFuture<Integer>> tasks = new ArrayList<>();
         counterList = new ArrayList<>();
-        Counter counter;
-        for(int i = 0; i < numberOfDices; i++){
-
-            counter = new Counter();
-            counterList.add(counter);
-
-            tasks.add(rollingTaskAsync(counter, i, report, whenDone, cancelProcess));
-        }
-
-        List<Integer> results = await(CompletableFutureAsync.whenAll(tasks));
+        List<Integer> results = await(CompletableFutureAsync.whenAll(
+                IntStream.range(0, numberOfDices)
+                .mapToObj(n -> {
+                    Counter c = new Counter();
+                    counterList.add(c);
+                    return rollingTaskAsync(c, n, report, whenDone, cancelProcess);
+                })
+                .collect(Collectors.toList())));
     }
 
     private CompletableFuture<Integer> rollingTaskAsync(Counter counter, int diceNumber, BiConsumer<Integer, Integer> report, BiConsumer<Integer, Integer> whenDone, CancelationProcess cancelProcess) {
