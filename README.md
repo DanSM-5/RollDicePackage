@@ -151,3 +151,26 @@ In this class I declared only one generic method that accepts a List\<Completabl
 
 Finally we have this refactored method that is easier to understand. 
 The adventage of this approach is the readability. It is more comprehensive and intuitive than the original method, which is key to write clean code.
+
+### Alternatives without an extra List\<\> object
+
+There is also a possibility to rewrite the method to execute the same result in only one stream. Writing the method in this way will no longer require to declare a variable of type List\<CompletableFuture\<Integer\>\> because we can return that list directly to the whenAll() method.
+
+```
+    public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
+        counterList = new ArrayList<>();
+        List<Integer> results = await(CompletableFutureAsync.whenAll(
+                // Start of the stream with a range of integers from 0 to numberOfDices
+                IntStream.range(0, numberOfDices)
+                // Map the integers to a CompletableFuture<Integer>
+                .mapToObj(n -> {
+                    Counter c = new Counter();
+                    counterList.add(c);
+                   return rollingTaskAsync(c, n, report, whenDone, cancelProcess);
+                })
+                // collect the results to a list of type List\<CompletableFuture\<Integer\>\>
+                .collect(Collectors.toList())));
+    }
+```
+
+The output of this method is identicall to the previous version and both execute the rollingTaskAsync methods in parallel. The main difference between both is the way they are written. Depending of the situation one can be more explicit with our intentions, so it is up to you to decide which version fits your requirements.
