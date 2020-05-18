@@ -109,7 +109,7 @@ public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer
 ```
 
 The method await() only accepts a Future or CompletableFuture object to return, so the way to await multiple CompletableFuture tasks is to map them into
-a List<T>. However, List<T> is not an instance of CompletableFuture, so it can't be used with await directly. That's why I use supplyAsync() method
+a List<T>. However, List<T> is not an instance of CompletableFuture, so it can't be used with await directly. That's why I used supplyAsync() method
 to process the maping to a List<T> asynchronously or in other words, to return a CompletableFuture\<List\<Integer\>\> that can be used with await().
         
 ### Static Class to get a similar functionality of the Task.WhenAll()
