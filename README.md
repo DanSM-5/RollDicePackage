@@ -9,7 +9,7 @@ The class CompletableFuture allow us to write asynchronous code more easily. How
 I was curious about how to perform similar behaviours using CompletableFurture class when I found a very interesting library from EA. EA made an await functionality based on the Await keyword in .net (for more information visit https://github.com/electronicarts/ea-async).
 This is great because it helps to reduce the complexity of asynchronous tasks, allowing to write asynchronous code that looks like normal synchronous code.
 
-I starting using this approach with ea-async and it works very well until I got stuck in part, "How to await multiple CompletableFuture objects until all of them are done?"
+I started using this approach with ea-async and it works very well until I got stuck in part, "How to await multiple CompletableFuture objects until all of them are done?"
 To explain this let me made an anolog with C# where I originally wrote this function.
 
 ### Original method created in C#
