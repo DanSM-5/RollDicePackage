@@ -1,6 +1,6 @@
 # RollDicePackage
 It is a package with a ported version of the RollingDiceLib for Java using the library ea-async. Check the original library for C# here https://github.com/DanSM-5/RollingDices.
-My purpose for wirtting this project was to learn the feautures of Java for wirtting asynchronous code.
+My purpose for writting this project was to learn the feautures of Java for wirtting asynchronous code.
 
 ## Awaiting multiple CompletableFuture objects
 
