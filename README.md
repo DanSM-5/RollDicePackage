@@ -160,7 +160,7 @@ There is also a possibility to rewrite the method to execute the same result in 
     public void rollDiceAsyncParallel(BiConsumer<Integer,Integer> report, BiConsumer<Integer,Integer> whenDone, CancelationProcess cancelProcess) {
         counterList = new ArrayList<>();
         List<Integer> results = await(CompletableFutureAsync.whenAll(
-                // Start of the stream with a range of integers from 0 to numberOfDices
+                // Start the stream with a range of integers from 0 to numberOfDices
                 IntStream.range(0, numberOfDices)
                 // Map the integers to a CompletableFuture<Integer>
                 .mapToObj(n -> {
@@ -168,7 +168,7 @@ There is also a possibility to rewrite the method to execute the same result in 
                     counterList.add(c);
                    return rollingTaskAsync(c, n, report, whenDone, cancelProcess);
                 })
-                // collect the results to a list of type List\<CompletableFuture\<Integer\>\>
+                // collect the results to a list of type List<CompletableFuture<Integer>>
                 .collect(Collectors.toList())));
     }
 ```
